@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,50 +10,29 @@
 </head>
 <body>
     <header>
-        <div class="hero">
-            <h1>Contact Me</h1>
-        </div>
-        <nav aria-label="Main navigation">
+        <h1>Contact Me</h1>
+        <nav>
             <a href="index.html">Home</a>
             <a href="hobbies.html">My Hobbies</a>
             <a href="media.html">My Favorite Media</a>
-            <a href="contact.html" class="active">Contact</a>
+            <a href="contact.html">Contact</a>
         </nav>
     </header>
 
     <main>
-        <section class="animate-section">
+        <section>
             <h2>My Contact Details</h2>
             <p><strong>Name:</strong> Abdul Sami</p>
             <p><strong>Designation:</strong> Student</p>
-            <p><strong>Email:</strong> <a href="mailto:abdulsami@example.com">abdulsami@example.com</a></p>
+            <p><strong>Email:</strong> abdulsami@example.com</p>
             <p><strong>Contact#:</strong> +92-300-1234567</p>
-            <h3>My Location</h3>
-            <iframe src="https://maps.google.com/maps?q=Iqra%20University&t=&z=13&ie=UTF8&iwloc=&output=embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" aria-label="Map of Iqra University"></iframe>
-        </section>
-        <section class="animate-section">
-            <h2>Send a Message</h2>
-            <p><em>Note: This form is for demonstration only and is non-functional in this static site.</em></p>
-            <form id="contact-form">
-                <div class="form-group">
-                    <input type="text" id="name" name="name" required>
-                    <label for="name">Name</label>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" name="email" required>
-                    <label for="email">Email</label>
-                </div>
-                <div class="form-group">
-                    <textarea id="message" name="message" required></textarea>
-                    <label for="message">Message</label>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
+            <h3>My Location:</h3>
+            <iframe src="https://maps.google.com/maps?q=Iqra%20University&t=&z=13&ie=UTF8&iwloc=&output=embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </section>
     </main>
 
-    <footer>
-        <p>© 2025 Abdul Sami</p>
+    <footer >
+        <p>&copy; 2025 Abdul Sami</p>
     </footer>
 </body>
 </html>
